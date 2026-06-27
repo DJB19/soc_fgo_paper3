@@ -1,0 +1,15 @@
+# Raw NASA data files should not be uploaded
+data_raw/
+*.mat
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Large compressed files
+*.zip
+*.tar.gz
+*.log
+
+# Temporary files
+.DS_Store
