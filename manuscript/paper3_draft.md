@@ -45,7 +45,7 @@ This study uses a public lithium-ion battery aging dataset to evaluate the appli
 
 The primary dataset used in this study is the NASA lithium-ion battery aging dataset. The dataset contains repeated charge, discharge, and impedance measurement profiles for several lithium-ion cells. In this work, the discharge profiles are selected because they provide time-series measurements of current, terminal voltage, temperature, and discharge capacity, which are suitable for SOC reconstruction and estimation evaluation.
 
-In the first stage of this study, battery B0005 is selected as the initial evaluation object. A total of 164 discharge cycles are extracted from the original MATLAB data file. Each discharge cycle contains measured terminal voltage, measured current, measured temperature, time, and cycle capacity. These extracted data are then converted into a unified CSV format for subsequent SOC estimation experiments.
+In the first stage of this study, battery B0005 is selected as the initial evaluation object. A total of 168 discharge cycles are extracted from the original MATLAB data file. Each discharge cycle contains measured terminal voltage, measured current, measured temperature, time, and cycle capacity. These extracted data are then converted into a unified CSV format for subsequent SOC estimation experiments.
 
 The converted data format includes battery ID, raw cycle index, discharge cycle ID, time, measured terminal voltage, measured current, measured temperature, measured discharge capacity, and reconstructed reference SOC. This unified format allows the same estimation program to be applied to different discharge cycles and, in future extensions, to different batteries in the same dataset.
 
@@ -59,7 +59,7 @@ t_k,\quad I_k,\quad V_k,\quad T_k,\quad Q_{\mathrm{cycle}}
 
 where \(t_k\) is the time at sample \(k\), \(I_k\) is the measured current, \(V_k\) is the measured terminal voltage, \(T_k\) is the measured temperature, and \(Q_{\mathrm{cycle}}\) is the measured discharge capacity of the corresponding cycle.
 
-The discharge cycles are indexed sequentially after extraction. For battery B0005, 164 discharge cycles are obtained. The early, middle, and late aging stages are represented by selected discharge cycles from the beginning, middle, and end of the extracted cycle sequence. In the initial experiment, cycle 1, cycle 82, and cycle 164 are used as representative cycles for early-stage, middle-stage, and late-stage battery aging, respectively.
+The discharge cycles are indexed sequentially after extraction. For battery B0005, 168 discharge cycles are obtained. The early, middle, and late aging stages are represented by selected discharge cycles from the beginning, middle, and end of the extracted cycle sequence. In the initial experiment, cycle 1, cycle 84, and cycle 168 are used as representative cycles for early-stage, middle-stage, and late-stage battery aging, respectively.
 
 This selection strategy allows the influence of battery aging on SOC estimation performance to be analyzed. As the battery ages, the available discharge capacity decreases, and the voltage response may also change. Therefore, comparing estimation performance across different aging stages is useful for evaluating the robustness and practical applicability of the proposed FGO-based SOC estimation framework.
 
@@ -87,7 +87,7 @@ The reconstructed SOC is clipped to the interval \([0,1]\) to avoid numerical va
 
 Battery aging is represented by the degradation of measured discharge capacity over repeated cycles. For each discharge cycle, the corresponding measured capacity is extracted and used to construct a capacity degradation curve. This curve provides a direct representation of the aging process of the selected battery.
 
-For battery B0005, the extracted 164 discharge cycles show a gradual decrease in measured discharge capacity. This capacity degradation is important for SOC estimation because the available capacity appears directly in current-integration-based state transition models. If the capacity value is inaccurate or not updated with aging, SOC estimation error may accumulate.
+For battery B0005, the extracted 168 discharge cycles show a gradual decrease in measured discharge capacity. This capacity degradation is important for SOC estimation because the available capacity appears directly in current-integration-based state transition models. If the capacity value is inaccurate or not updated with aging, SOC estimation error may accumulate.
 
 Therefore, in this paper, capacity degradation is not only treated as a property of the dataset, but also as an important factor influencing SOC estimation performance. The relationship between cycle capacity and SOC estimation error will be analyzed in the experimental section.
 
@@ -200,7 +200,7 @@ The experiments are designed to answer the following research questions:
 
 ### 4.2 Selected Battery and Aging Stages
 
-Battery B0005 is used as the first evaluation object in this study. From the original NASA MATLAB data file, 164 discharge cycles are extracted and converted into a unified CSV format. Each discharge cycle contains measured current, terminal voltage, temperature, time, measured discharge capacity, and reconstructed reference SOC.
+Battery B0005 is used as the first evaluation object in this study. From the original NASA MATLAB data file, 168 discharge cycles are extracted and converted into a unified CSV format. Each discharge cycle contains measured current, terminal voltage, temperature, time, measured discharge capacity, and reconstructed reference SOC.
 
 To analyze the influence of battery aging, three representative discharge cycles are selected:
 
@@ -209,16 +209,16 @@ To analyze the influence of battery aging, three representative discharge cycles
 \]
 
 \[
-\text{middle stage: cycle 82}
+\text{middle stage: cycle 84}
 \]
 
 \[
-\text{late stage: cycle 164}
+\text{late stage: cycle 168}
 \]
 
 These cycles represent the beginning, middle, and end of the extracted aging sequence. The early-stage cycle corresponds to a relatively fresh battery condition, while the late-stage cycle corresponds to a more degraded battery condition. The middle-stage cycle provides an intermediate aging condition.
 
-In addition to these three representative cycles, all 164 discharge cycles are used to construct the capacity degradation curve. This curve is used to analyze the relationship between battery aging and SOC estimation performance.
+In addition to these three representative cycles, all 168 discharge cycles are used to construct the capacity degradation curve. This curve is used to analyze the relationship between battery aging and SOC estimation performance.
 
 ### 4.3 Experimental Cases
 
@@ -228,13 +228,13 @@ The experimental cases are organized as follows:
 SOC estimation is performed on discharge cycle 1 of battery B0005. This case evaluates the performance of different methods under a relatively fresh battery condition.
 
 **Case 2: Middle-stage SOC estimation.**  
-SOC estimation is performed on discharge cycle 82. This case evaluates the performance of different methods under an intermediate aging condition.
+SOC estimation is performed on discharge cycle 84. This case evaluates the performance of different methods under an intermediate aging condition.
 
 **Case 3: Late-stage SOC estimation.**  
-SOC estimation is performed on discharge cycle 164. This case evaluates the performance of different methods under a more degraded battery condition.
+SOC estimation is performed on discharge cycle 168. This case evaluates the performance of different methods under a more degraded battery condition.
 
 **Case 4: Capacity degradation analysis.**  
-The measured discharge capacity of all 164 discharge cycles is extracted and plotted against cycle index. This case provides a direct representation of the aging process of battery B0005.
+The measured discharge capacity of all 168 discharge cycles is extracted and plotted against cycle index. This case provides a direct representation of the aging process of battery B0005.
 
 **Case 5: Capacity-error relationship analysis.**  
 After SOC estimation is performed across multiple cycles, the relationship between measured discharge capacity and SOC estimation error will be analyzed. This case is used to investigate whether estimation performance deteriorates as battery capacity decreases.
@@ -294,7 +294,7 @@ RMSE and MAE are used to evaluate overall estimation accuracy. Maximum absolute 
 The experimental results will be presented using both figures and tables. The planned figures include:
 
 1. Voltage, current, and reconstructed SOC curves for representative discharge cycles.
-2. Capacity degradation curve of battery B0005 across 164 discharge cycles.
+2. Capacity degradation curve of battery B0005 across 168 discharge cycles.
 3. SOC estimation comparison curves for early, middle, and late aging stages.
 4. SOC estimation error curves for different methods.
 5. RMSE variation across selected cycles or aging stages.
