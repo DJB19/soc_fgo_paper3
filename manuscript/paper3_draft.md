@@ -309,3 +309,28 @@ The planned tables include:
 
 This experimental design allows both visual and quantitative comparison of different SOC estimation methods under real battery aging conditions.
 
+
+## 5. Results and Discussion
+
+### 5.1 Dataset Characteristics and Capacity Degradation
+
+The extracted B0005 dataset contains 168 discharge cycles. Each discharge cycle includes measured terminal voltage, current, temperature, time, and measured discharge capacity. Based on the extracted discharge profiles, reference SOC trajectories were reconstructed using the measured capacity of each cycle.
+
+The capacity degradation curve shows a clear decrease in measured discharge capacity over repeated discharge cycles. The measured capacity of the first discharge cycle is 1.8565 Ah, which is used as the initial reference capacity in this study. For the representative aging-stage cycles, the measured capacities are 1.8565 Ah for cycle 1, 1.5489 Ah for cycle 84, and 1.3251 Ah for cycle 168. The corresponding capacity ratios relative to cycle 1 are 1.0000, 0.8343, and 0.7138, respectively.
+
+These results confirm that the selected cycles represent different aging stages of battery B0005. Cycle 1 represents the early stage, cycle 84 represents the middle stage, and cycle 168 represents the late stage. The significant decrease in measured capacity indicates that battery aging should not be ignored in SOC estimation. Since the available capacity appears directly in current-integration-based SOC estimation models, capacity degradation can introduce substantial estimation error if the capacity value is not updated.
+
+The representative voltage, current, and reconstructed SOC curves also show that the discharge duration and voltage response vary across aging stages. These variations reflect real experimental characteristics that are not fully captured by simplified simulation models. Therefore, the public battery aging dataset provides a meaningful basis for evaluating SOC estimation methods under realistic aging conditions.
+
+### 5.2 Coulomb Counting Baseline and Capacity Degradation Effect
+
+Two Coulomb Counting settings were evaluated. The first setting uses the measured capacity of each discharge cycle. The second setting fixes the capacity to the measured capacity of cycle 1 and uses it as the nominal capacity for all selected aging-stage cycles.
+
+When the measured capacity of each individual discharge cycle is used, the Coulomb Counting result is almost identical to the reconstructed reference SOC. The RMSE values for cycle 1, cycle 84, and cycle 168 are on the order of \(10^{-17}\). This result is expected because both the reconstructed reference SOC and the cycle-specific Coulomb Counting estimator are based on the same current integration and the same measured cycle capacity. Therefore, this result should not be interpreted as a practical advantage of Coulomb Counting. Instead, it verifies the consistency of the data preprocessing, reference SOC reconstruction, and metric calculation procedures.
+
+In contrast, when the capacity of cycle 1 is fixed as the nominal capacity, the SOC estimation error increases significantly as the battery ages. For cycle 1, the RMSE remains nearly zero because the nominal capacity is equal to the measured capacity of that cycle. For cycle 84, where the capacity ratio decreases to approximately 0.8343, the RMSE increases to approximately 0.1041. For cycle 168, where the capacity ratio further decreases to approximately 0.7138, the RMSE increases to approximately 0.1881.
+
+This result demonstrates that capacity degradation has a direct impact on current-integration-based SOC estimation. If a battery management system continues to use the initial nominal capacity while the actual available capacity decreases, SOC estimation error will accumulate and become increasingly significant in later aging stages. Therefore, aging-aware capacity information or additional measurement constraints are necessary for reliable SOC estimation over the battery lifetime.
+
+The nominal-capacity Coulomb Counting result also provides a useful motivation for evaluating model-based and optimization-based methods. Since factor graph optimization can incorporate both dynamic constraints and voltage measurement constraints, it may provide a more flexible framework for SOC estimation under aging conditions. The following sections will further evaluate whether FGO can improve SOC estimation stability compared with conventional baseline methods.
+
