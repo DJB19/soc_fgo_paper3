@@ -14,8 +14,8 @@ df = pd.read_csv(CSV_PATH)
 
 selected_cycles = {
     "early": 1,
-    "middle": 82,
-    "late": 164,
+    "middle": 84,
+    "late": 168,
 }
 
 # Use cycle 1 capacity as nominal capacity
