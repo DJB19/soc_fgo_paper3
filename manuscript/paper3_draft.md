@@ -334,3 +334,24 @@ This result demonstrates that capacity degradation has a direct impact on curren
 
 The nominal-capacity Coulomb Counting result also provides a useful motivation for evaluating model-based and optimization-based methods. Since factor graph optimization can incorporate both dynamic constraints and voltage measurement constraints, it may provide a more flexible framework for SOC estimation under aging conditions. The following sections will further evaluate whether FGO can improve SOC estimation stability compared with conventional baseline methods.
 
+
+### 5.3 FGO-Based SOC Estimation Results
+
+After evaluating the Coulomb Counting baselines, FGO-based SOC estimation was further investigated using the selected aging stages of battery B0005. Three representative discharge cycles were used: cycle 1 for the early stage, cycle 84 for the middle aging stage, and cycle 168 for the late aging stage. The objective was to examine whether the FGO framework could reduce the SOC estimation error caused by capacity degradation.
+
+A fixed-capacity FGO was first implemented. In this case, the capacity was fixed to the initial capacity of cycle 1, while a voltage factor was added using an empirical voltage-SOC relationship fitted from the early-stage discharge data. This method provided only limited improvement over nominal-capacity Coulomb Counting. For cycle 84, the RMSE decreased from 0.1041 to 0.0889. For cycle 168, the RMSE decreased only slightly from 0.1881 to 0.1837. These results indicate that simply adding a voltage factor is insufficient when the capacity is still assumed to be constant. The effectiveness of FGO under aging conditions depends strongly on whether the model can account for capacity degradation.
+
+To address this limitation, a physically constrained capacity-aware FGO formulation was introduced. Instead of treating all SOC states as independent optimization variables, the SOC trajectory was parameterized using the cumulative discharged capacity and an estimated effective capacity. The SOC at time step \(k\) was expressed as
+
+\[
+SOC_k = 1 - \frac{Q_{\mathrm{dis}}(k)}{Q_{\mathrm{eff}}},
+\]
+
+where \(Q_{\mathrm{dis}}(k)\) is the cumulative discharged capacity and \(Q_{\mathrm{eff}}\) is the effective capacity estimated by the optimization. This formulation guarantees a physically consistent monotonic SOC decrease during discharge and avoids non-physical SOC recovery in the late-discharge region.
+
+The physically constrained capacity-aware FGO significantly improved the SOC estimation accuracy. In cycle 84, the RMSE was reduced from 0.1041 for nominal-capacity Coulomb Counting to 0.0089. In cycle 168, the RMSE was reduced from 0.1881 to 0.0196. These results correspond to RMSE reductions of approximately 91.5% and 89.5%, respectively. The estimated effective capacities were also close to the reconstructed cycle capacities. For cycle 84, the true cycle capacity was 1.5489 Ah and the estimated capacity was 1.5717 Ah. For cycle 168, the true cycle capacity was 1.3251 Ah and the estimated capacity was 1.3669 Ah.
+
+Figure X compares the SOC trajectories for the late-stage cycle 168. The nominal-capacity Coulomb Counting method overestimates SOC because it uses the initial capacity and does not account for aging-induced capacity loss. In contrast, the physically constrained capacity-aware FGO produces a monotonic SOC trajectory that closely follows the reconstructed reference SOC. A small residual offset remains near the end of discharge, mainly because the estimated effective capacity is slightly higher than the reconstructed cycle capacity.
+
+Figure Y summarizes the RMSE comparison among nominal-capacity Coulomb Counting, fixed-capacity FGO, and physically constrained capacity-aware FGO. The results show that the main advantage of FGO in aged battery SOC estimation is not merely the inclusion of a voltage factor, but the ability to incorporate capacity-related parameters into a unified optimization framework.
+
