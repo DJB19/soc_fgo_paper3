@@ -2,13 +2,11 @@
 
 ## Abstract
 
-Accurate state-of-charge estimation is a fundamental function of battery management systems for electric vehicles and energy storage applications. In previous simulation-oriented studies, factor graph optimization has shown potential advantages in improving estimation accuracy and robustness by formulating battery state estimation as an optimization problem over model and measurement constraints. However, validation using real experimental battery data remains necessary because practical battery measurements contain non-ideal characteristics such as sensor noise, cycle-to-cycle variation, capacity degradation, and operating condition changes.
+Accurate state-of-charge (SOC) estimation remains challenging for lithium-ion batteries under aging conditions because capacity degradation changes the relationship between current integration and the actual available charge. This study evaluates factor graph optimization (FGO)-based SOC estimation using public NASA lithium-ion battery aging datasets. Unlike simulation-only evaluations, experimentally measured discharge data are used, and reference SOC trajectories are reconstructed from measured discharge capacity. Battery B0005 is first used as a representative case to establish the preprocessing, baseline evaluation, and FGO-based estimation workflow. The method is then extended to B0006, B0007, and B0018 for cross-cell validation.
 
-This paper evaluates factor graph optimization-based battery SOC estimation under aging conditions using public experimental lithium-ion battery datasets. Different from controlled simulation studies, the proposed evaluation focuses on real discharge cycles obtained from public battery aging experiments. Reference SOC is reconstructed from discharge capacity for selected cycles, and current and voltage measurements are used as input signals for SOC estimation. The performance of FGO is compared with conventional baseline methods, including Coulomb Counting and Kalman-filter-based estimation. Multiple batteries and multiple aging stages are considered to analyze how capacity degradation and cycle variation affect SOC estimation accuracy.
+The results show that nominal-capacity Coulomb Counting produces increasing SOC errors as battery capacity degrades. A fixed-capacity FGO formulation with a voltage factor provides only limited improvement because the capacity remains fixed to the initial value. To address this limitation, a physically constrained capacity-aware FGO formulation is introduced. In this formulation, the SOC trajectory is generated from cumulative discharged capacity and an estimated effective capacity, which enforces a monotonic SOC decrease during discharge. Across the tested NASA cells, the proposed method consistently reduces the SOC RMSE in middle and late aging stages compared with nominal-capacity Coulomb Counting. These results demonstrate that the main advantage of FGO for aged battery SOC estimation lies in its ability to incorporate physical constraints and aging-related parameters into a unified optimization framework.
 
-The objective of this study is not to propose a completely new factor graph formulation, but to systematically evaluate the applicability of an FGO-based SOC estimation framework under real experimental aging conditions. Evaluation metrics include root mean square error, mean absolute error, maximum absolute error, and error standard deviation. The results are expected to clarify whether FGO can maintain stable estimation performance across different batteries and aging cycles, and whether it can serve as a reliable state estimation module for future battery monitoring and digital twin applications.
-
-**Keywords**: Battery management system; state-of-charge estimation; factor graph optimization; lithium-ion battery; aging condition; public battery dataset; battery digital twin.
+**Keywords:** lithium-ion battery; state of charge; factor graph optimization; capacity degradation; battery aging; Coulomb Counting; NASA battery dataset
 
 ## 1. Introduction
 
@@ -28,26 +26,27 @@ This work is also relevant to future battery digital twin applications. A batter
 
 The main contributions of this paper are summarized as follows:
 
-1. A public experimental dataset-based evaluation framework is established for FGO-based battery SOC estimation under aging conditions.
-2. Reference SOC is reconstructed from real discharge cycles, enabling systematic evaluation of SOC estimation accuracy using public battery aging data.
-3. The influence of capacity degradation and cycle-to-cycle variation on FGO-based SOC estimation performance is analyzed across selected batteries and aging stages.
-4. The performance of FGO is compared with conventional baseline methods, including Coulomb Counting and Kalman-filter-based estimation, using multiple quantitative error metrics.
-5. The applicability of FGO as a potential state estimation module for future battery monitoring and digital twin applications is discussed.
+1. A public-data-based SOC estimation evaluation workflow is constructed using NASA lithium-ion battery aging datasets. Discharge cycles are extracted from B0005, B0006, B0007, and B0018, and reference SOC trajectories are reconstructed from measured discharge capacity.
 
-The remainder of this paper is organized as follows. Section 2 introduces the public battery dataset and preprocessing procedure. Section 3 describes the SOC estimation methods used in this study, including Coulomb Counting, Kalman-filter-based estimation, and factor graph optimization. Section 4 presents the experimental design and evaluation metrics. Section 5 discusses the results under different aging conditions. Section 6 concludes the paper and outlines future work.
+2. The influence of capacity degradation on conventional nominal-capacity Coulomb Counting is quantitatively analyzed across multiple aging stages. The results show that using a fixed initial capacity leads to increasing SOC overestimation as the battery ages.
 
+3. A physically constrained capacity-aware FGO formulation is proposed for aged battery SOC estimation. In this formulation, the SOC trajectory is generated from cumulative discharged capacity and an estimated effective capacity, which enforces a monotonic SOC decrease during discharge.
+
+4. Cross-cell validation is conducted using four NASA battery cells. The proposed method consistently reduces SOC estimation errors in middle and late aging stages compared with nominal-capacity Coulomb Counting, demonstrating the potential of FGO for aging-aware SOC estimation.
 
 ## 2. Public Battery Dataset and Data Preprocessing
 
 ### 2.1 Public Battery Aging Dataset
 
-This study uses a public lithium-ion battery aging dataset to evaluate the applicability of factor graph optimization for battery state-of-charge estimation under real experimental conditions. Different from simulation-generated data, public experimental battery datasets contain practical non-ideal characteristics such as measurement noise, capacity degradation, cycle-to-cycle variation, and inconsistent discharge duration. These characteristics are important for evaluating whether a state estimation algorithm can be applied beyond controlled simulation environments.
+This study uses public lithium-ion battery aging data to evaluate the applicability of factor graph optimization for SOC estimation under real experimental aging conditions. Different from simulation-generated data, public experimental battery datasets contain practical non-ideal characteristics such as measurement noise, capacity degradation, cycle-to-cycle variation, and inconsistent discharge duration. These characteristics are important for evaluating whether a state estimation algorithm can be applied beyond controlled simulation environments.
 
 The primary dataset used in this study is the NASA lithium-ion battery aging dataset. The dataset contains repeated charge, discharge, and impedance measurement profiles for several lithium-ion cells. In this work, the discharge profiles are selected because they provide time-series measurements of current, terminal voltage, temperature, and discharge capacity, which are suitable for SOC reconstruction and estimation evaluation.
 
-In the first stage of this study, battery B0005 is selected as the initial evaluation object. A total of 168 discharge cycles are extracted from the original MATLAB data file. Each discharge cycle contains measured terminal voltage, measured current, measured temperature, time, and cycle capacity. These extracted data are then converted into a unified CSV format for subsequent SOC estimation experiments.
+Four NASA battery cells are used in this study: B0005, B0006, B0007, and B0018. Battery B0005 is first used as the main representative case to establish the preprocessing workflow, baseline comparison, and FGO-based SOC estimation procedure. The same workflow is then extended to B0006, B0007, and B0018 for cross-cell validation. This design allows the proposed method to be evaluated not only on a single cell, but also across different degradation trajectories.
 
-The converted data format includes battery ID, raw cycle index, discharge cycle ID, time, measured terminal voltage, measured current, measured temperature, measured discharge capacity, and reconstructed reference SOC. This unified format allows the same estimation program to be applied to different discharge cycles and, in future extensions, to different batteries in the same dataset.
+The extracted discharge cycles include 168 cycles for B0005, 168 cycles for B0006, 168 cycles for B0007, and 132 cycles for B0018. For each battery, representative early-, middle-, and late-aging discharge cycles are selected for detailed SOC estimation analysis. The early stage corresponds to the first discharge cycle, the late stage corresponds to the final discharge cycle, and the middle stage is selected near the midpoint of the available discharge-cycle sequence.
+
+The converted data format includes battery ID, raw cycle index, discharge cycle ID, time, measured terminal voltage, measured current, measured temperature, measured discharge capacity, cumulative discharged capacity, and reconstructed reference SOC. This unified format allows the same estimation program to be applied consistently to multiple batteries and aging stages.
 
 ### 2.2 Discharge Cycle Extraction
 
@@ -85,11 +84,11 @@ The reconstructed SOC is clipped to the interval \([0,1]\) to avoid numerical va
 
 ### 2.4 Capacity Degradation Representation
 
-Battery aging is represented by the degradation of measured discharge capacity over repeated cycles. For each discharge cycle, the corresponding measured capacity is extracted and used to construct a capacity degradation curve. This curve provides a direct representation of the aging process of the selected battery.
+Battery aging is represented by the degradation of measured discharge capacity over repeated cycles. For each discharge cycle, the corresponding measured capacity is extracted and used to construct a capacity degradation curve. This curve provides a direct representation of the aging process of each selected battery cell.
 
-For battery B0005, the extracted 168 discharge cycles show a gradual decrease in measured discharge capacity. This capacity degradation is important for SOC estimation because the available capacity appears directly in current-integration-based state transition models. If the capacity value is inaccurate or not updated with aging, SOC estimation error may accumulate.
+In this study, capacity degradation is analyzed for four NASA battery cells: B0005, B0006, B0007, and B0018. The extracted discharge-cycle data show that all four cells experience capacity fade, but the degradation patterns are different among cells. B0005 contains 168 discharge cycles, with the measured capacity decreasing from 1.8565 Ah in the first cycle to 1.3251 Ah in the final cycle. B0006 also contains 168 discharge cycles and shows stronger degradation, with the capacity decreasing from 2.0353 Ah to 1.1857 Ah. B0007 contains 168 discharge cycles, with capacity decreasing from 1.8911 Ah to 1.4325 Ah. B0018 contains 132 discharge cycles, with capacity decreasing from 1.8550 Ah to 1.3411 Ah.
 
-Therefore, in this paper, capacity degradation is not only treated as a property of the dataset, but also as an important factor influencing SOC estimation performance. The relationship between cycle capacity and SOC estimation error will be analyzed in the experimental section.
+This capacity degradation is important for SOC estimation because the available capacity appears directly in current-integration-based state transition models. If the capacity value is assumed to be constant and is not updated with aging, SOC estimation error may accumulate. Therefore, the capacity degradation curves are used not only to describe the aging characteristics of the selected cells, but also to motivate the capacity-aware FGO formulation developed in this study.
 
 ### 2.5 Preprocessing Workflow
 
@@ -108,7 +107,9 @@ This preprocessing procedure transforms the original public battery dataset into
 
 ## 3. SOC Estimation Methods
 
-This section describes the SOC estimation methods used in this study. Three categories of methods are considered: Coulomb Counting, Kalman-filter-based estimation, and factor graph optimization. Coulomb Counting is used as a basic current-integration baseline. Kalman-filter-based estimation is used as a conventional model-based recursive baseline. Factor graph optimization is evaluated as the main optimization-based estimation method.
+This section describes the SOC estimation methods and optimization formulations used in this study. Coulomb Counting is first introduced as a basic current-integration baseline because it directly reflects the influence of capacity uncertainty on SOC estimation. A fixed-capacity FGO formulation is then considered to evaluate whether adding a voltage factor can improve SOC estimation when the capacity remains fixed. Finally, a physically constrained capacity-aware FGO formulation is introduced as the main proposed method. In this formulation, the effective capacity is estimated and the SOC trajectory is generated from cumulative discharged capacity, which enforces physically consistent monotonic SOC behavior during discharge.
+
+Although Kalman-filter-based methods are widely used for battery SOC estimation, the quantitative comparison in this study focuses on Coulomb Counting and FGO-based formulations. This choice is made because the main objective is to isolate the influence of capacity degradation and to evaluate whether FGO can incorporate aging-related capacity parameters into the estimation framework.
 
 ### 3.1 Coulomb Counting
 
@@ -124,9 +125,9 @@ Coulomb Counting is simple and computationally efficient. However, it is sensiti
 
 In this study, the initial SOC at the beginning of each discharge cycle is set to 1.0. The measured discharge capacity of each cycle is used as the capacity value for reconstructing the reference SOC. For baseline estimation, both cycle-specific capacity and nominal-capacity settings can be considered to analyze the influence of capacity uncertainty.
 
-### 3.2 Kalman-Filter-Based Estimation
+### 3.2 Model-Based Recursive Estimation Background
 
-Kalman-filter-based methods estimate SOC recursively by combining a battery state transition model with voltage measurements. In a simplified SOC estimation problem, the state transition model can be derived from the current integration equation:
+Kalman-filter-based methods are widely used for battery SOC estimation because they can recursively combine a battery state transition model with voltage measurements. In a simplified SOC estimation problem, the state transition model can be derived from the current integration equation:
 
 \[
 SOC_k = SOC_{k-1} - \frac{\eta I_k \Delta t_k}{Q} + w_k
@@ -140,9 +141,9 @@ V_k = h(SOC_k, I_k, \theta) + v_k
 
 where \(V_k\) is the measured terminal voltage, \(h(\cdot)\) is the voltage prediction function, \(\theta\) represents battery model parameters, and \(v_k\) represents measurement noise.
 
-For linear systems, the standard Kalman Filter can be applied. For nonlinear battery voltage models, the Extended Kalman Filter or Unscented Kalman Filter is usually required. In this paper, a Kalman-filter-based estimator is considered as a conventional model-based baseline. Its recursive structure makes it computationally efficient, but its performance depends on the accuracy of the battery model, the noise covariance settings, and the validity of linearization assumptions.
+For linear systems, the standard Kalman Filter can be applied. For nonlinear battery voltage models, Extended Kalman Filter or Unscented Kalman Filter formulations are usually required. These recursive estimators are computationally efficient, but their performance depends on the accuracy of the battery model, the noise covariance settings, and the validity of linearization or approximation assumptions.
 
-The purpose of including a Kalman-filter-based method is to compare recursive estimation with optimization-based estimation under the same public experimental battery data. This comparison helps clarify whether FGO provides practical advantages under real measurement noise and aging-induced capacity variation.
+In this study, Kalman-filter-based estimation is discussed as a conventional model-based background. The quantitative experiments focus on Coulomb Counting and FGO-based formulations because the main objective is to investigate how capacity degradation affects current-integration-based SOC estimation and how FGO can incorporate capacity-related aging parameters into the optimization problem.
 
 ### 3.3 Factor Graph Optimization
 
@@ -241,15 +242,17 @@ After SOC estimation is performed across multiple cycles, the relationship betwe
 
 ### 4.4 Compared Methods
 
-Three SOC estimation methods are considered in this study:
+The quantitative comparison focuses on three SOC estimation methods:
 
-1. Coulomb Counting,
-2. Kalman-filter-based estimation,
-3. Factor graph optimization.
+1. Nominal-capacity Coulomb Counting,
+2. Fixed-capacity FGO,
+3. Physically constrained capacity-aware FGO.
 
-Coulomb Counting serves as the simplest baseline method. It relies only on current integration and capacity information. Kalman-filter-based estimation serves as a conventional recursive model-based method. Factor graph optimization is the main method evaluated in this study.
+Nominal-capacity Coulomb Counting uses the initial discharge capacity as a fixed nominal capacity for all aging stages. This method represents a simple baseline for evaluating the influence of capacity degradation.
 
-All methods use the same preprocessed discharge cycle data. The reconstructed reference SOC is used as the evaluation reference. The same time, current, voltage, and capacity information are used to ensure a fair comparison.
+Fixed-capacity FGO uses the same nominal capacity but introduces a voltage-related factor into the optimization framework. This method is used to examine whether adding a voltage factor alone can improve SOC estimation under aging conditions.
+
+The physically constrained capacity-aware FGO is the main proposed method. It estimates an effective capacity and generates the SOC trajectory from cumulative discharged capacity. This formulation enforces a monotonic SOC decrease during discharge and explicitly accounts for capacity degradation.
 
 ### 4.5 Evaluation Metrics
 
