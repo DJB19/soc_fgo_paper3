@@ -388,7 +388,7 @@ Another important observation is that the estimated effective capacities are clo
 
 These results highlight the advantage of FGO as a flexible optimization framework. The benefit of FGO does not come only from adding more measurement factors, but from its ability to incorporate state variables, physical constraints, and aging-related parameters into a unified estimation problem. For aged batteries, this flexibility is important because SOC estimation and capacity degradation are strongly coupled.
 
-It should also be noted that the current evaluation is based on B0005 as a representative single-cell case. Therefore, the present results should be interpreted as a proof-of-concept evaluation using public experimental aging data. Further validation using additional NASA cells, such as B0006, B0007, and B0018, is needed to confirm the generality of the proposed method across different cells and degradation patterns.
+It should also be noted that B0005 is used as the main representative case for detailed analysis, while B0006, B0007, and B0018 are used for cross-cell validation. This design allows the proposed method to be evaluated across multiple degradation trajectories. Nevertheless, the present study is still based on public laboratory aging datasets under controlled discharge conditions. Further validation using additional battery datasets, partial discharge profiles, and real-world driving conditions is needed to confirm the practical generality of the proposed method.
 
 
 ### 5.6 Cross-Cell Validation Using Multiple NASA Cells
