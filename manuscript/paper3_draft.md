@@ -412,3 +412,17 @@ Table Y. Cross-cell SOC estimation performance comparison across middle and late
 | B0007 | late | 168 | 1.4325 | 1.4675 | 0.1483 | 0.0134 | 90.94 |
 | B0018 | middle | 66 | 1.5316 | 1.5849 | 0.1082 | 0.0198 | 81.73 |
 | B0018 | late | 132 | 1.3411 | 1.3933 | 0.1756 | 0.0219 | 87.54 |
+## 6. Conclusion
+
+This study evaluated FGO-based SOC estimation under battery aging conditions using public NASA lithium-ion battery aging datasets. Unlike simulation-only studies, this work used experimentally measured discharge data and reconstructed reference SOC trajectories based on measured discharge capacity. Battery B0005 was first used as the main representative case to establish the preprocessing, baseline evaluation, and FGO-based estimation workflow. The proposed workflow was then extended to B0006, B0007, and B0018 for cross-cell validation.
+
+The results show that capacity degradation has a significant impact on SOC estimation when the battery capacity is assumed to be constant. Nominal-capacity Coulomb Counting produced increasing SOC errors as the battery aged. For B0005, the RMSE increased to 0.1041 in the middle aging stage and 0.1881 in the late aging stage. Similar trends were observed in the other NASA cells, especially B0006, which exhibited stronger capacity degradation.
+
+A fixed-capacity FGO formulation with a voltage factor provided only limited improvement because the capacity was still fixed to the initial value. This indicates that adding a voltage factor alone is insufficient for aged batteries if the dominant effect of capacity degradation is not explicitly considered.
+
+To address this limitation, a physically constrained capacity-aware FGO formulation was introduced. In this formulation, the SOC trajectory is generated from the cumulative discharged capacity and an estimated effective capacity. This design enforces a monotonic SOC decrease during discharge and avoids non-physical SOC recovery. The proposed method significantly reduced SOC estimation errors in the middle and late aging stages. Across B0005, B0006, B0007, and B0018, the physically constrained capacity-aware FGO consistently outperformed nominal-capacity Coulomb Counting.
+
+The proposed approach demonstrates that FGO is useful not only as a state estimation framework, but also as a flexible structure for incorporating physical constraints and aging-related parameters. The results suggest that capacity-aware FGO can be a promising component for future aging-aware battery management systems and battery digital twin applications.
+
+This study still has several limitations. The reference SOC was reconstructed from discharge capacity rather than directly measured internal SOC. The voltage-SOC relationship was modeled using a simple empirical polynomial fitted from early-stage data. In addition, the current validation was based on selected representative cycles from public experimental datasets. Future work should consider more advanced electrochemical or equivalent-circuit voltage models, online capacity estimation under partial discharge conditions, and broader validation using additional real-world driving profiles and battery datasets.
+
