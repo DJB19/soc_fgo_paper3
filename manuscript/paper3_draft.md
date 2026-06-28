@@ -351,16 +351,16 @@ where \(Q_{\mathrm{dis}}(k)\) is the cumulative discharged capacity and \(Q_{\ma
 
 The physically constrained capacity-aware FGO significantly improved the SOC estimation accuracy. In cycle 84, the RMSE was reduced from 0.1041 for nominal-capacity Coulomb Counting to 0.0089. In cycle 168, the RMSE was reduced from 0.1881 to 0.0196. These results correspond to RMSE reductions of approximately 91.5% and 89.5%, respectively. The estimated effective capacities were also close to the reconstructed cycle capacities. For cycle 84, the true cycle capacity was 1.5489 Ah and the estimated capacity was 1.5717 Ah. For cycle 168, the true cycle capacity was 1.3251 Ah and the estimated capacity was 1.3669 Ah.
 
-Figure X compares the SOC trajectories for the late-stage cycle 168. The nominal-capacity Coulomb Counting method overestimates SOC because it uses the initial capacity and does not account for aging-induced capacity loss. In contrast, the physically constrained capacity-aware FGO produces a monotonic SOC trajectory that closely follows the reconstructed reference SOC. A small residual offset remains near the end of discharge, mainly because the estimated effective capacity is slightly higher than the reconstructed cycle capacity.
+Figure 3 compares the SOC trajectories for the late-stage cycle 168. The nominal-capacity Coulomb Counting method overestimates SOC because it uses the initial capacity and does not account for aging-induced capacity loss. In contrast, the physically constrained capacity-aware FGO produces a monotonic SOC trajectory that closely follows the reconstructed reference SOC. A small residual offset remains near the end of discharge, mainly because the estimated effective capacity is slightly higher than the reconstructed cycle capacity.
 
-Figure Y summarizes the RMSE comparison among nominal-capacity Coulomb Counting, fixed-capacity FGO, and physically constrained capacity-aware FGO. The results show that the main advantage of FGO in aged battery SOC estimation is not merely the inclusion of a voltage factor, but the ability to incorporate capacity-related parameters into a unified optimization framework.
+Figure 4 summarizes the RMSE comparison among nominal-capacity Coulomb Counting, fixed-capacity FGO, and physically constrained capacity-aware FGO. The results show that the main advantage of FGO in aged battery SOC estimation is not merely the inclusion of a voltage factor, but the ability to incorporate capacity-related parameters into a unified optimization framework.
 
 
 ### 5.4 Quantitative Comparison of SOC Estimation Methods
 
-Table X summarizes the SOC estimation performance of the three methods for B0005 under different aging stages. The nominal-capacity Coulomb Counting method shows increasing error as the battery ages because it uses the initial capacity throughout all cycles. The fixed-capacity FGO provides only limited improvement, indicating that the voltage factor alone is insufficient when the capacity remains fixed. In contrast, the physically constrained capacity-aware FGO significantly reduces the SOC estimation error in both the middle and late aging stages by estimating the effective capacity and enforcing a monotonic discharge trajectory.
+Table 2 summarizes the SOC estimation performance of the three methods for B0005 under different aging stages. The nominal-capacity Coulomb Counting method shows increasing error as the battery ages because it uses the initial capacity throughout all cycles. The fixed-capacity FGO provides only limited improvement, indicating that the voltage factor alone is insufficient when the capacity remains fixed. In contrast, the physically constrained capacity-aware FGO significantly reduces the SOC estimation error in both the middle and late aging stages by estimating the effective capacity and enforcing a monotonic discharge trajectory.
 
-Table X. SOC estimation performance comparison for B0005 under different aging stages.
+Table 2. SOC estimation performance comparison for B0005 under different aging stages.
 
 | Stage | Cycle | Method | True Capacity (Ah) | Estimated Capacity (Ah) | RMSE | MAE | Max Error |
 |---|---:|---|---:|---:|---:|---:|---:|
@@ -392,15 +392,15 @@ It should also be noted that the current evaluation is based on B0005 as a repre
 
 To evaluate the generality of the proposed method, additional experiments were conducted on three more NASA lithium-ion cells: B0006, B0007, and B0018. Together with B0005, these four cells provide a cross-cell validation set with different initial capacities and degradation trajectories. For each battery, representative early-, middle-, and late-aging discharge cycles were selected. The cross-cell comparison focused on the middle and late aging stages, where the effect of capacity degradation on SOC estimation becomes more significant.
 
-Figure Z compares the RMSE values of nominal-capacity Coulomb Counting and physically constrained capacity-aware FGO across the four cells in the middle and late aging stages. In all cases, the proposed method substantially reduced the SOC estimation error. This confirms that the advantage of the proposed framework is not limited to a single battery case.
+Figure 5 compares the RMSE values of nominal-capacity Coulomb Counting and physically constrained capacity-aware FGO across the four cells in the middle and late aging stages. In all cases, the proposed method substantially reduced the SOC estimation error. This confirms that the advantage of the proposed framework is not limited to a single battery case.
 
-Table Y summarizes the quantitative results. For B0005, the RMSE was reduced from 0.1041 to 0.0089 in the middle stage and from 0.1881 to 0.0196 in the late stage. For B0006, the RMSE was reduced from 0.1810 to 0.0332 in the middle stage and from 0.2897 to 0.0668 in the late stage. For B0007, the RMSE was reduced from 0.0888 to 0.0042 in the middle stage and from 0.1483 to 0.0134 in the late stage. For B0018, the RMSE was reduced from 0.1082 to 0.0198 in the middle stage and from 0.1756 to 0.0219 in the late stage.
+Table 3 summarizes the quantitative results. For B0005, the RMSE was reduced from 0.1041 to 0.0089 in the middle stage and from 0.1881 to 0.0196 in the late stage. For B0006, the RMSE was reduced from 0.1810 to 0.0332 in the middle stage and from 0.2897 to 0.0668 in the late stage. For B0007, the RMSE was reduced from 0.0888 to 0.0042 in the middle stage and from 0.1483 to 0.0134 in the late stage. For B0018, the RMSE was reduced from 0.1082 to 0.0198 in the middle stage and from 0.1756 to 0.0219 in the late stage.
 
 The results also show that the estimated effective capacities followed the degradation trend of each battery. Although the estimation error varied among the batteries, the proposed method consistently produced monotonic SOC trajectories without non-physical SOC recovery. This indicates that the physically constrained capacity-aware FGO is robust across different cells and aging conditions.
 
 Among the tested batteries, B0006 exhibited the largest SOC estimation error in the late stage, even after applying the proposed method. This is reasonable because B0006 experienced the strongest degradation among the four cells, with the capacity decreasing from 2.0353 Ah to 1.1857 Ah. Even in this more challenging case, however, the proposed method still provided a substantial improvement over nominal-capacity Coulomb Counting.
 
-Table Y. Cross-cell SOC estimation performance comparison across middle and late aging stages.
+Table 3. Cross-cell SOC estimation performance comparison across middle and late aging stages.
 
 | Battery | Stage | Cycle | True Capacity (Ah) | Estimated Capacity (Ah) | Nominal CC RMSE | Physical CA-FGO RMSE | RMSE Reduction (%) |
 |---|---|---:|---:|---:|---:|---:|---:|
