@@ -429,3 +429,22 @@ The proposed approach demonstrates that FGO is useful not only as a state estima
 
 This study still has several limitations. The reference SOC was reconstructed from discharge capacity rather than directly measured internal SOC. The voltage-SOC relationship was modeled using a simple empirical polynomial fitted from early-stage data. In addition, the current validation was based on selected representative cycles from public experimental datasets. Future work should consider more advanced electrochemical or equivalent-circuit voltage models, online capacity estimation under partial discharge conditions, and broader validation using additional real-world driving profiles and battery datasets.
 
+
+## Figures
+
+### Figure 1. Capacity degradation of B0005
+
+![Figure 1. Capacity degradation of B0005](../figures/B0005_capacity_degradation.png)
+
+### Figure 2. SOC estimation result for B0005 late-stage cycle 168
+
+![Figure 2. SOC estimation result for B0005 late-stage cycle 168](../figures/B0005_cycle168_physical_ca_fgo_soc.png)
+
+### Figure 3. RMSE comparison of three methods for B0005
+
+![Figure 3. RMSE comparison of three methods for B0005](../figures/B0005_three_method_rmse_comparison_physical.png)
+
+### Figure 4. Multi-cell RMSE comparison across middle and late aging stages
+
+![Figure 4. Multi-cell RMSE comparison across middle and late aging stages](../figures/multicell_middle_late_rmse_comparison.png)
+
