@@ -387,3 +387,28 @@ These results highlight the advantage of FGO as a flexible optimization framewor
 
 It should also be noted that the current evaluation is based on B0005 as a representative single-cell case. Therefore, the present results should be interpreted as a proof-of-concept evaluation using public experimental aging data. Further validation using additional NASA cells, such as B0006, B0007, and B0018, is needed to confirm the generality of the proposed method across different cells and degradation patterns.
 
+
+### 5.6 Cross-Cell Validation Using Multiple NASA Cells
+
+To evaluate the generality of the proposed method, additional experiments were conducted on three more NASA lithium-ion cells: B0006, B0007, and B0018. Together with B0005, these four cells provide a cross-cell validation set with different initial capacities and degradation trajectories. For each battery, representative early-, middle-, and late-aging discharge cycles were selected. The cross-cell comparison focused on the middle and late aging stages, where the effect of capacity degradation on SOC estimation becomes more significant.
+
+Figure Z compares the RMSE values of nominal-capacity Coulomb Counting and physically constrained capacity-aware FGO across the four cells in the middle and late aging stages. In all cases, the proposed method substantially reduced the SOC estimation error. This confirms that the advantage of the proposed framework is not limited to a single battery case.
+
+Table Y summarizes the quantitative results. For B0005, the RMSE was reduced from 0.1041 to 0.0089 in the middle stage and from 0.1881 to 0.0196 in the late stage. For B0006, the RMSE was reduced from 0.1810 to 0.0332 in the middle stage and from 0.2897 to 0.0668 in the late stage. For B0007, the RMSE was reduced from 0.0888 to 0.0042 in the middle stage and from 0.1483 to 0.0134 in the late stage. For B0018, the RMSE was reduced from 0.1082 to 0.0198 in the middle stage and from 0.1756 to 0.0219 in the late stage.
+
+The results also show that the estimated effective capacities followed the degradation trend of each battery. Although the estimation error varied among the batteries, the proposed method consistently produced monotonic SOC trajectories without non-physical SOC recovery. This indicates that the physically constrained capacity-aware FGO is robust across different cells and aging conditions.
+
+Among the tested batteries, B0006 exhibited the largest SOC estimation error in the late stage, even after applying the proposed method. This is reasonable because B0006 experienced the strongest degradation among the four cells, with the capacity decreasing from 2.0353 Ah to 1.1857 Ah. Even in this more challenging case, however, the proposed method still provided a substantial improvement over nominal-capacity Coulomb Counting.
+
+Table Y. Cross-cell SOC estimation performance comparison across middle and late aging stages.
+
+| Battery | Stage | Cycle | True Capacity (Ah) | Estimated Capacity (Ah) | Nominal CC RMSE | Physical CA-FGO RMSE | RMSE Reduction (%) |
+|---|---|---:|---:|---:|---:|---:|---:|
+| B0005 | middle | 84 | 1.5489 | 1.5717 | 0.1041 | 0.0089 | 91.46 |
+| B0005 | late | 168 | 1.3251 | 1.3669 | 0.1881 | 0.0196 | 89.55 |
+| B0006 | middle | 84 | 1.4675 | 1.5504 | 0.1810 | 0.0332 | 81.65 |
+| B0006 | late | 168 | 1.1857 | 1.3200 | 0.2897 | 0.0668 | 76.95 |
+| B0007 | middle | 84 | 1.6109 | 1.5987 | 0.0888 | 0.0042 | 95.26 |
+| B0007 | late | 168 | 1.4325 | 1.4675 | 0.1483 | 0.0134 | 90.94 |
+| B0018 | middle | 66 | 1.5316 | 1.5849 | 0.1082 | 0.0198 | 81.73 |
+| B0018 | late | 132 | 1.3411 | 1.3933 | 0.1756 | 0.0219 | 87.54 |
