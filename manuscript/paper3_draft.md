@@ -373,3 +373,17 @@ Table X. SOC estimation performance comparison for B0005 under different aging s
 | late | 168 | Nominal-Capacity CC | 1.3251 | - | 0.1881 | 0.1640 | 0.2857 |
 | late | 168 | Fixed-Capacity FGO | 1.3251 | - | 0.1837 | 0.1395 | 0.5453 |
 | late | 168 | Physical CA-FGO | 1.3251 | 1.3669 | 0.0196 | 0.0172 | 0.0305 |
+### 5.5 Discussion
+
+The results obtained from B0005 show that capacity degradation has a significant influence on SOC estimation when the capacity is assumed to be constant. The nominal-capacity Coulomb Counting method uses the initial capacity of cycle 1 for all aging stages. As a result, the method increasingly overestimates SOC as the battery ages. This behavior is clearly observed in the middle and late aging stages, where the RMSE increases to 0.1041 and 0.1881, respectively.
+
+The fixed-capacity FGO method introduces a voltage factor into the estimation framework. However, because the capacity is still fixed to the initial value, the improvement is limited. For cycle 84, the RMSE is reduced from 0.1041 to 0.0889, while for cycle 168, the RMSE is only reduced from 0.1881 to 0.1837. These results indicate that a voltage factor alone cannot fully compensate for aging-induced capacity loss. This also suggests that the performance of FGO depends strongly on whether the model includes the dominant aging-related parameters.
+
+The physically constrained capacity-aware FGO provides a more effective solution by estimating the effective capacity and generating the SOC trajectory from the cumulative discharged capacity. Since the SOC trajectory is parameterized by the estimated capacity, the discharge process is physically constrained to be monotonic. This avoids non-physical SOC recovery in the late-discharge region and produces more realistic SOC trajectories. Compared with nominal-capacity Coulomb Counting, the proposed method reduces the RMSE by approximately 91.5% in cycle 84 and 89.5% in cycle 168.
+
+Another important observation is that the estimated effective capacities are close to the reconstructed cycle capacities. For cycle 84, the reconstructed capacity is 1.5489 Ah and the estimated capacity is 1.5717 Ah. For cycle 168, the reconstructed capacity is 1.3251 Ah and the estimated capacity is 1.3669 Ah. Although small deviations remain, the estimated capacities correctly reflect the decreasing trend caused by battery aging. This demonstrates that the proposed framework can provide not only SOC estimation but also useful information related to capacity degradation.
+
+These results highlight the advantage of FGO as a flexible optimization framework. The benefit of FGO does not come only from adding more measurement factors, but from its ability to incorporate state variables, physical constraints, and aging-related parameters into a unified estimation problem. For aged batteries, this flexibility is important because SOC estimation and capacity degradation are strongly coupled.
+
+It should also be noted that the current evaluation is based on B0005 as a representative single-cell case. Therefore, the present results should be interpreted as a proof-of-concept evaluation using public experimental aging data. Further validation using additional NASA cells, such as B0006, B0007, and B0018, is needed to confirm the generality of the proposed method across different cells and degradation patterns.
+
